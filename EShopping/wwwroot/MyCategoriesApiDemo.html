@@ -1,0 +1,251 @@
+﻿﻿
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>My API Categories Demo</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+    <div class="container">
+
+        <center><h1><i><u>*List of Category*</u></i></h1></center>
+        <style>
+            body {
+                background-image: url('https://t3.ftcdn.net/jpg/02/64/92/28/360_F_264922838_NErJEovZiP9MTa49apqL1Vs3f88ZT8Dg.jpg');
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-size: cover;
+            }
+        </style>
+
+
+        <table id="myTable" class="table table-striped table-bordered">
+            
+            <thead>
+                
+                <tr>
+                  <th class="col-2">Category ID</th>
+                    <th class="col-8">Category Name</th>
+                    <th class="col-2 text-center">
+                        <button class="btn btn-sm btn-secondary" onclick="fAddNew()">Add new</button>
+                    </th>
+                </tr>
+               
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+        <p><a href="/">Back to home page</a></p>
+    </div>
+
+
+
+    <!-- The Modal -->
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Category Information</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="txtCategoryId" class="control-label">Category ID:</label>
+                            <input id="txtCategoryId" name="txtCategoryId" class="form-control" readonly="readonly" />
+                        </div>
+                        <div class="form-group">
+                            <label for="txtCategoryName" class="control-label">Category Name:</label>
+                            <input id="txtCategoryName" name="txtCategoryName" class="form-control" />
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="fSave()">Save</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <script>
+
+        var currentMode = '';
+
+        function fAddNew() {
+
+            currentMode = 'NEW';
+
+            // empty the form fields
+            $('#txtCategoryId').val('');
+            $('#txtCategoryName').val('');
+
+            // popup the modal window
+            $('#myModal').modal();
+        }
+
+        function fSave() {
+
+            if (currentMode === 'NEW') {
+                let data = {
+                    // "categoryId": parseInt( $('#txtCategoryId').val() ),
+                    "categoryName": $('#txtCategoryName').val()
+                };
+
+                console.log(data);
+
+                // Save the data using the API
+                const xmlHttp = new XMLHttpRequest();
+                const url = '/api/Categories';
+                xmlHttp.open('POST', url);
+                xmlHttp.setRequestHeader('content-type', 'application/json');
+                xmlHttp.send(JSON.stringify(data));
+                xmlHttp.onload = function () {
+                    console.log(xmlHttp.responseText);
+                    let responseObject = JSON.parse(xmlHttp.responseText);
+                    console.log(responseObject.statusCode);
+                    if (responseObject.statusCode == 201) {         // HTTP Response Code 201 "CREATED"
+                        fLoadData();                                // repopulate the HTML Table
+                        alert("Newly inserted Category ID: " + responseObject.value.categoryId);
+                    }
+                };
+            }
+            else if (currentMode === 'EDIT') {
+                let data = {
+                    "categoryId": parseInt($('#txtCategoryId').val()),
+                    "categoryName": $('#txtCategoryName').val()
+                };
+
+                const xmlHttp = new XMLHttpRequest();
+                const url = '/api/Categories/' + data.categoryId;           // HTTP PUT /api/Categories/2
+                xmlHttp.open('PUT', url);
+                xmlHttp.setRequestHeader('content-type', 'application/json');
+                xmlHttp.send(JSON.stringify(data));
+                xmlHttp.onload = function () {
+                    console.log(xmlHttp.responseText);                       // nothing is returned from the API
+                    if (xmlHttp.status == 204)                               // HTTP RESPONSE 204 "No Content"
+                    {
+                        alert('updated successfully!');
+                        fLoadData();            // reload the HTML Table.
+                    }
+                };
+            }
+
+
+        }
+
+        function fDelete(categoryIdToDelete) {
+
+            if (!confirm("Are you sure you want to delete?")) {
+                return;         // exit the function, since user does not want to delete.
+            }
+
+            // delete the selected category.
+            let data = {
+                "id": categoryIdToDelete
+            };
+            const xmlHttp = new XMLHttpRequest();
+            const url = '/api/Categories/' + categoryIdToDelete;        // HTTP REST API DELETE : /api/Categories/2
+            xmlHttp.open('DELETE', url);
+            xmlHttp.setRequestHeader('content-type', 'application/json');
+            xmlHttp.send(JSON.stringify(data));
+            xmlHttp.onload = function () {
+                let responseObject = JSON.parse(xmlHttp.responseText);
+                alert("Successfully Deleted the Category ID: " + responseObject.categoryId);
+                fLoadData();
+            };
+        }
+
+        // Retreive the Category to edit from the REST API, and pouplate the modal window to show the record to edit.
+        function fEdit(categoryIdToEdit) {
+
+            currentMode = 'EDIT';
+
+            let data = {
+                "id": categoryIdToEdit
+            };
+            const xmlHttp = new XMLHttpRequest();
+            const url = '/api/Categories/' + categoryIdToEdit;        // HTTP REST API GET : /api/Categories/2
+            xmlHttp.open('GET', url);
+            xmlHttp.setRequestHeader('content-type', 'application/json');
+            xmlHttp.send(JSON.stringify(data));
+            xmlHttp.onload = function () {
+                let responseObject = JSON.parse(xmlHttp.responseText);
+
+                // populate the input fields in the modal window
+                $('#txtCategoryId').val(responseObject.categoryId);
+                $('#txtCategoryName').val(responseObject.categoryName);
+
+                $('#myModal').modal("show");
+            }
+        }
+
+
+        function fDisplayData(theJsonData) {
+
+            let strHTML = '';
+
+            $.each(theJsonData, function (idx, elem) {
+                console.log(elem);               // for debugging
+
+                strHTML
+                    += '<tr>'
+                    + '<td>' + elem.categoryId + '</td>'
+                    + '<td>' + elem.categoryName + '</td>'
+                    + '<td class="text-center">'
+                    + '<button type="button" class="btn btn-secondary btn-sm" onclick="fEdit(' + elem.categoryId + ')">Edit</button>'
+                    + '&nbsp;'
+                    + '<button type="button" class="btn btn-secondary btn-sm" onclick="fDelete(' + elem.categoryId + ')">Delete</button>'
+                    + '</td>'
+                    + '</tr>';
+            });
+
+            // Remove all existing rows in the Table
+            $('#myTable tbody tr').remove();
+
+            // Add the generated table row contents.
+            $('#myTable tbody').append(strHTML);
+        }
+
+
+        function fLoadData() {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    let theData = JSON.parse(this.responseText);
+                    console.log(theData);                           // for debugging
+                    // alert("Received the data from the APi");     // for debugging
+                    fDisplayData(theData);
+                }
+            };
+            xmlHttp.open("GET", "/api/categories");
+            xmlHttp.send();
+        }
+
+        $(document).ready(() => {
+            fLoadData();
+        });
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using EShopping.Models.Enums
+
+
+@model IEnumerable<EShopping.Models.Category>
+@inject UserManager<IdentityUser> _userManager
+
+
+@{
+    ViewData["Title"] = "Index";
+    var user = await _userManager.GetUserAsync(this.User);
+    var isAdmin = await _userManager.IsInRoleAsync(user, MyIdentityRoleNames.ProductAdmin.ToString());
+}
+
+<center><h1><i><u>*Welcome To Our Online Shopping Mall*</u></i></h1></center>
+<style>
+body {
+  background-image: url('https://t3.ftcdn.net/jpg/02/64/92/28/360_F_264922838_NErJEovZiP9MTa49apqL1Vs3f88ZT8Dg.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+</style>
+
+<p>
+@if (isAdmin)
+    {
+
+    <a asp-action="Create"><button type="button" class="btn btn-danger">Create New</button></a>
+    }
+    else {
+        
+   @* <a asp-action="Create"><button type="button" class="btn btn-danger disabled" href="#">Create New</button></a>*@
+       
+    }
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsCreated)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsCreated)
+            </td>
+            <td>
+                @if (isAdmin)
+    {
+                <a asp-action="Edit" asp-route-id="@item.CategoryId">Edit</a>
+                }
+    else {
+        
+   @* <a asp-action="Create"><button type="button" class="btn btn-danger disabled" href="#">Create New</button></a>*@
+       
+    }
+                |
+                @if (isAdmin)
+    {
+                 
+                <a asp-action="Delete" asp-route-id="@item.CategoryId">Delete</a>
+                }
+    else {
+        
+   @* <a asp-action="Create"><button type="button" class="btn btn-danger disabled" href="#">Create New</button></a>*@
+       
+    }
+                |
+               <a asp-action="Details" asp-route-id="@item.CategoryId">Details</a>
+             
+                
+                <a class="btn btn-danger" asp-area="eshopping" asp-controller="Products" asp-action="GetProductOfCategory" asp-route-filterCategoryId="@item.CategoryId"> Products Available</a>
+               
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

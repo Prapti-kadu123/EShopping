@@ -1,0 +1,73 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using EShopping.Models.Enums
+
+@model IEnumerable<EShopping.Models.Product>
+@inject UserManager<IdentityUser> _userManager
+
+@{
+    ViewData["Title"] = "Index";
+     var user = await _userManager.GetUserAsync(this.User);
+    var isAdmin = await _userManager.IsInRoleAsync(user, MyIdentityRoleNames.ProductAdmin.ToString());
+}
+
+<center><h1><i><u>*Choose Your Product In The Category*</u></i></h1></center>
+<style>
+body {
+  background-image: url('https://t3.ftcdn.net/jpg/02/64/92/28/360_F_264922838_NErJEovZiP9MTa49apqL1Vs3f88ZT8Dg.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+</style>
+<p>
+    @if (isAdmin)
+    {
+
+    <a asp-action="Create"><button type="button" class="btn btn-danger">Create New</button></a>
+    }
+    else {
+   @*     
+    <a asp-action="Create"><button type="button" class="btn btn-danger disabled" href="#">Create New</button></a>*@
+       
+    }
+</p>
+
+<div class="card-columns">
+    @foreach (var product in Model) {
+        <div class="card">
+            <div class="card-header">
+                @product.ProductName
+            </div>
+            <div class="card-body">
+                @Html.DisplayNameFor(modelItem => product.Category.CategoryName) : @product.Category.CategoryName
+                <br />
+                @Html.DisplayNameFor(modelItem => product.Quantity) : @product.Quantity
+            </div>
+            <div class="card-footer">
+                @if (isAdmin)
+    {
+                <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@product.ProductID">Edit</a> 
+                }
+    else {
+        
+   @* <a asp-action="Create"><button type="button" class="btn btn-danger disabled" href="#">Create New</button></a>*@
+       
+    }            |
+                <a class="btn btn-sm btn-primary" asp-action="Details" asp-route-id="@product.ProductID">Details</a> 
+                |
+                @if (isAdmin)
+    {
+                <a class="btn btn-sm btn-primary" asp-action="Delete" asp-route-id="@product.ProductID">Delete</a>
+                }
+    else {
+        
+   @* <a asp-action="Create"><button type="button" class="btn btn-danger disabled" href="#">Create New</button></a>*@
+       
+    }
+                
+            </div>
+        </div>
+    }
+</div>
+
+<a asp-area="eshopping" asp-controller="Categories" asp-action="Index">List of Categories</a>
