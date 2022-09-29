@@ -59,6 +59,7 @@ namespace EShopping.Areas.eshopping.Controllers
         }
 
         // GET: eshopping/Customers/Create
+        [Authorize(Roles = "ProductMember")]
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
@@ -68,6 +69,7 @@ namespace EShopping.Areas.eshopping.Controllers
         // POST: eshopping/Customers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "ProductMember")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CustomerId,CustomerName,Address,PhoneNumber,Email,OrderDateTime")] Customer customer)
@@ -95,6 +97,7 @@ namespace EShopping.Areas.eshopping.Controllers
 
 
         // GET: eshopping/Customers/Edit/5
+        [Authorize(Roles = "ProductMember")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -113,6 +116,7 @@ namespace EShopping.Areas.eshopping.Controllers
         // POST: eshopping/Customers/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "ProductMember")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CustomerId,CustomerName,Address,PhoneNumber,Email,OrderDateTime")] Customer customer)
@@ -146,6 +150,7 @@ namespace EShopping.Areas.eshopping.Controllers
         }
 
         // GET: eshopping/Customers/Delete/5
+        [Authorize(Roles = "ProductMember")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -164,6 +169,7 @@ namespace EShopping.Areas.eshopping.Controllers
         }
 
         // POST: eshopping/Customers/Delete/5
+        [Authorize(Roles = "ProductMember")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

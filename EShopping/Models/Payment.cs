@@ -12,7 +12,7 @@ namespace EShopping.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int OrderDetailId { get; set; }
 
-
+        //-----Payment Method---//
         [Required(ErrorMessage = "{0} cannot be empty!")]
         [Column(TypeName = "varchar(50)")]
         [Display(Name = "Payment Methods")]

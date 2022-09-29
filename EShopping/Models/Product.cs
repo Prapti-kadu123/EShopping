@@ -12,13 +12,18 @@ namespace EShopping.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 
+        //------ProductID-----//
         public int ProductID { get; set; }
+
+        //-----ProductName----//
 
         [Required(ErrorMessage = "{0} cannot be empty!")]
         [Column(TypeName = "varchar(50)")]
         [Display(Name = "Name of the Product")]
         public string ProductName { get; set; }
 
+
+        
         [Required]
         [DefaultValue(1)]
         virtual public short Quantity { get; set; }

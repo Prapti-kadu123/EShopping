@@ -67,7 +67,7 @@
         </div>
 </div>
             <div class="container">
-              <b><i><a class="navbar-brand" asp-area="" asp-page="/Index"><b><i>RedStore|EShopping Design</i></b></a></i></b>
+              <b><i><a class="navbar-brand" asp-area="" asp-page="/Index"><b><i>RedStore|EFashion Design</i></b></a></i></b>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -75,38 +75,48 @@
                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                          <a class="nav-link text-dark" asp-area="" asp-page="/Index"><b>*HOME*</b></a>
+                          <a class="nav-link text-dark" asp-area="" asp-page="/Index"><b>HOME</b></a>
                         </li>
                         <li class="nav-item">
-                           <a class="nav-link text-dark" asp-area="" asp-page="/Privacy"><b>*PRIVACY*</b></a>
+                           <a class="nav-link text-dark" asp-area="" asp-page="/Privacy"><b>PRIVACY</b></a>
                         </li>
                         <li class="nav-item">
-                           <a class="nav-link text-dark" asp-area="" asp-page="/About"><b>*ABOUT*</b></a>
+                           <a class="nav-link text-dark" asp-area="" asp-page="/About"><b>ABOUT</b></a>
                         </li>
                         <li class="nav-item dropdown">
-                        <a class="nav-link text-dark dropdown-toggle" data-toggle="dropdown" href="#"><b>*FASHIONCOLLECTION*</b></a>
+                        <a class="nav-link text-dark dropdown-toggle" data-toggle="dropdown" href="#"><b>FASHION COLLECTION</b></a>
                         <div class="dropdown-menu">
                              <a class="dropdown-item"
-                                asp-area="eshopping" asp-controller="Categories" asp-action="Index">*Categories*</a>
+                                asp-area="eshopping" asp-controller="Categories" asp-action="Index">Categories</a>
                                     
                                     <a class="dropdown-item"
-                            asp-area="eshopping" asp-controller="Products" asp-action="Index">*Products*</a>
+                            asp-area="eshopping" asp-controller="Products" asp-action="Index">Products</a>
                                     <a class="dropdown-item"
-                            asp-area="eshopping" asp-controller="Payments" asp-action="Index">*Set Payment*</a>
+                            asp-area="eshopping" asp-controller="Payments" asp-action="Index">Set Payment</a>
+                            @if(isUserAdmin){
                                     <a class="dropdown-item"
-                            asp-area="eshopping" asp-controller="OrderDetails" asp-action="Index">*See Order*</a>
+                            asp-area="eshopping" asp-controller="OrderDetails" asp-action="Index">See Order</a>
                                     <div class="dropdown-divider"></div>
-                                
+                                       <a class="dropdown-item"
+                               asp-area="eshopping" asp-controller="Customers" asp-action="Index">List Of Customer</a>
+                                }
+                                else
+                                {
+                                     <a class="dropdown-item"
+                               asp-area="eshopping" asp-controller="Customers" asp-action="Create">Customer Register</a>
+                                  <a class="dropdown-item"
+                               asp-area="eshopping" asp-controller="OrderDetails" asp-action="Create"> Order Now</a>
+                                }
                                 <a class="dropdown-item"
-                                   asp-area="eshopping" asp-controller="ShowProducts" asp-action="Index">*Show Products*</a> 
+                                   asp-area="eshopping" asp-controller="ShowProducts" asp-action="Index">Show Products</a> 
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="~/MyCategoriesApiDemo.html">
-                                    *Categories API Demo*
+                                    Categories API Demo
                                 </a> 
-                               <a class="dropdown-item"
-                               asp-area="eshopping" asp-controller="Customers" asp-action="Index">*Register Customer*</a>
-                                            <a class="dropdown-item"
-                               asp-area="eshopping" asp-controller="OrderDetails" asp-action="Create">*Place Order*</a>
+                            
+
+                              
+                                         
                                
                           </div>
                                      </li>              

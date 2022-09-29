@@ -12,14 +12,19 @@ namespace EShopping.Models
     public class OrderDetail
     {
         public static int ToatlAmount { get; internal set; }
+
+        //------OrderDetailId----//
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int OrderDetailId { get; set; }
 
+        //-------Quantity----//
         [Required]
         [Display(Name = "Ordered Quantity")]
         public int Quantity { get; set; }
 
+
+        //-------OrderPrice-----//
         [Required(ErrorMessage = "{0} cannot be empty!")]
         [Column(TypeName = "varchar(50)")]
         [Display(Name = "Price")]

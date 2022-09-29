@@ -9,13 +9,14 @@ namespace EShopping.Models
     [Table(name: "Categories")]
     public class Category
     {
+        //---Category Id----//
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Category ID")]
         public int CategoryId { get; set; }
 
 
-
+        //----Category Name---//
         [Required(ErrorMessage = "{0} cannot be empty!")]
         [Column(TypeName = "varchar(50)")]
         [Display(Name = "Name of the Category")]

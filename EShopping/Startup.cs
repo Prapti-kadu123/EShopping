@@ -134,7 +134,7 @@ namespace EShopping
             // URL: https://localhost:xxxx/swagger
             app.UseSwaggerUI(config =>
             {
-                config.SwaggerEndpoint("/swagger/v1/swagger.json", "LMS Web API v1.0");
+                config.SwaggerEndpoint("/swagger/v1/swagger.json", "Online  Web API v1.0");
             });
 
 
